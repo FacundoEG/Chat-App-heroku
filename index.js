@@ -14,7 +14,7 @@ var roomsCollectionRef = database_1.firestore.collection("rooms");
 // ENDPOINTS
 app.get("/env", function (req, res) {
     res.json({
-        environment: "hola soy facu"
+        environment: "hola soy facu que onda pez"
     });
 });
 // SIGNUP

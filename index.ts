@@ -17,7 +17,7 @@ const roomsCollectionRef = firestore.collection("rooms");
 
 app.get("/env",(req,res)=>{
   res.json({
-    environment: "hola soy facu"
+    environment: "hola soy facu que onda pez"
   })
 })
 
