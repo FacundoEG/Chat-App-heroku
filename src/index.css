@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.root {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 30px;
+  max-width: 375px;
+}

@@ -1,0 +1,27 @@
+{
+  "name": "prueba",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev:front": "parcel serve ./src/index.html",
+    "build:front": "parcel build ./src/index.html",
+    "dev": "nodemon --watch ./index.ts --exec ts-node index.ts",
+    "build:api": "tsc index.ts",
+    "build": "yarn build:front && yarn build:api",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@vaadin/router": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "firebase": "8.7.1",
+    "firebase-admin": "^9.11.1",
+    "jsonfile": "^6.1.0",
+    "nanoid": "^3.1.25",
+    "nodemon": "^2.0.12",
+    "parcel": "^2.0.0-rc.0",
+    "tsc": "^2.0.3",
+    "uuid": "^8.3.2"
+  }
+}
