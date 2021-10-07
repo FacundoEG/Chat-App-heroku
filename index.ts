@@ -3,9 +3,10 @@ import * as cors from "cors";
 import * as express from "express";
 import { nanoid } from "nanoid";
 
+const port = process.env.PORT || 3000
+
 //API INIT AND CONFIG
 const app = express();
-const port = process.env.PORT
 app.use(express.json());
 app.use(cors());
 
@@ -16,7 +17,7 @@ const roomsCollectionRef = firestore.collection("rooms");
 
 app.get("/env",(req,res)=>{
   res.json({
-    environment: process.env.NODE_ENV
+    environment: "hola soy facu"
   })
 })
 

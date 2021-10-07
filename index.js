@@ -4,9 +4,9 @@ var database_1 = require("./database");
 var cors = require("cors");
 var express = require("express");
 var nanoid_1 = require("nanoid");
+var port = process.env.PORT || 3000;
 //API INIT AND CONFIG
 var app = express();
-var port = process.env.PORT;
 app.use(express.json());
 app.use(cors());
 var userCollectionRef = database_1.firestore.collection("users");
@@ -14,7 +14,7 @@ var roomsCollectionRef = database_1.firestore.collection("rooms");
 // ENDPOINTS
 app.get("/env", function (req, res) {
     res.json({
-        environment: process.env.NODE_ENV
+        environment: "hola soy facu"
     });
 });
 // SIGNUP
