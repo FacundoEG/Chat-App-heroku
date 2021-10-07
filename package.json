@@ -6,7 +6,7 @@
     "dev:front": "parcel serve ./src/index.html",
     "build:front": "parcel build ./src/index.html",
     "dev": "nodemon --watch ./index.ts --exec ts-node index.ts",
-    "build:api": "tsc",
+    "build:api": "tsc ./index.js",
     "build": "yarn build:front && yarn build:api",
     "start": "node index.js"
   },

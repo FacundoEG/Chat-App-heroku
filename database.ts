@@ -1,8 +1,8 @@
 import * as admin from "firebase-admin";
-import * as serviceAccount from "./key.json";
+const serviceKey = require("./serviceKey.json"); 
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as any),
+  credential: admin.credential.cert(serviceKey as any),
   databaseURL: "https://apx-dwf-m6-c3fa7-default-rtdb.firebaseio.com",
 });
 
