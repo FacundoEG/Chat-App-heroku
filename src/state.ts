@@ -1,7 +1,7 @@
 import { realtimeDB } from "./rtbs";
 import { Router } from "@vaadin/router";
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://chat-app-rooms-heroku.herokuapp.com";
 
 type Message = {
   from: string;
