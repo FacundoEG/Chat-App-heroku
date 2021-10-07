@@ -1,100 +1,102 @@
-import { realtimeDB, firestore } from "./database";
-import * as cors from "cors";
-import * as express from "express";
-import { nanoid } from "nanoid";
+"use strict";
+exports.__esModule = true;
+var database_1 = require("./database");
+var cors = require("cors");
+var express = require("express");
+var nanoid_1 = require("nanoid");
 //API INIT AND CONFIG
-const app = express();
-const port = process.env.PORT;
+var app = express();
+var port = process.env.PORT;
 app.use(express.json());
 app.use(cors());
-const userCollectionRef = firestore.collection("users");
-const roomsCollectionRef = firestore.collection("rooms");
+var userCollectionRef = database_1.firestore.collection("users");
+var roomsCollectionRef = database_1.firestore.collection("rooms");
 // ENDPOINTS
-app.get("/env", (req, res) => {
+app.get("/env", function (req, res) {
     res.json({
         environment: process.env.NODE_ENV
     });
 });
 // SIGNUP
-app.post("/signup", (req, res) => {
-    const userEmail = req.body.email;
-    const userName = req.body.name;
+app.post("/signup", function (req, res) {
+    var userEmail = req.body.email;
+    var userName = req.body.name;
     userCollectionRef
         .where("email", "==", userEmail)
         .get()
-        .then((searchResponse) => {
+        .then(function (searchResponse) {
         // VERIFICA QUE NO HAYA UN DOC CON EL EMAIL IGUAL AL USER EMAIL
         if (searchResponse.empty) {
             userCollectionRef
                 .add({ email: userEmail, name: userName })
-                .then((newUserRef) => {
+                .then(function (newUserRef) {
                 // DEVUELVE UN OBJETO CON EL ID DEL NUEVO USUSARIO CORRESPONDIENTE
                 res.status(200).json({
                     id: newUserRef.id,
-                    new: true,
+                    "new": true
                 });
             });
         }
         else {
             // SI EL EMAIL YA ESTABA REGRISTRADO EN UN USER, DEVUELVE EL ID DEL USUARIO CORRESPONDIENTE
             res.status(400).json({
-                message: "El email que ingresaste ya corresponde a un usuario registrado.",
+                message: "El email que ingresaste ya corresponde a un usuario registrado."
             });
         }
     });
 });
 // AUTHENTICATION
-app.post("/auth", (req, res) => {
-    const { email } = req.body;
+app.post("/auth", function (req, res) {
+    var email = req.body.email;
     userCollectionRef
         .where("email", "==", email)
         .get()
-        .then((searchResponse) => {
+        .then(function (searchResponse) {
         // VERIFICA QUE EL EMAIL DEL USER EXISTA EN ALGUN DOC
         if (searchResponse.empty) {
             res.status(404).json({
-                message: "El email que ingresaste no corresponde a un usuario registrado.",
+                message: "El email que ingresaste no corresponde a un usuario registrado."
             });
         }
         else {
             //DEVUELVE EL ID DEL USER IDENTIFICADO
             res.status(200).json({
-                id: searchResponse.docs[0].id,
+                id: searchResponse.docs[0].id
             });
         }
     });
 });
 // CREA UN NUEVO ROOM
-app.post("/rooms", (req, res) => {
-    const { userId } = req.body;
+app.post("/rooms", function (req, res) {
+    var userId = req.body.userId;
     userCollectionRef
         .doc(userId.toString())
         .get()
-        .then((doc) => {
+        .then(function (doc) {
         // VERIFICA QUE EL USUARIO EXISTA EN FIRESTORE USANDO EL ID
         // DE SER ASÍ, CREA UNA NUEVA ROOM CON UN ID
         if (doc.exists) {
             // CREAMOS LA REFERENCIA DEL NUEVO ROOM
-            const newRoomRef = realtimeDB.ref("rooms/" + nanoid());
+            var newRoomRef_1 = database_1.realtimeDB.ref("rooms/" + (0, nanoid_1.nanoid)());
             // STEAMOS EL OWNER COMO EL USER QUE INGRESO EL BODY
-            newRoomRef
+            newRoomRef_1
                 .set({
-                owner: userId,
+                owner: userId
             })
-                .then(() => {
+                .then(function () {
                 // GUARDA EL ID LARGO Y CREA UN ID CORTO PARA GUARDAR EN FIRESTORE
-                const roomLongId = newRoomRef.key;
-                const roomId = 1000 + Math.floor(Math.random() * 999);
+                var roomLongId = newRoomRef_1.key;
+                var roomId = 1000 + Math.floor(Math.random() * 999);
                 // CREA UN NUEVO DOCUMENTO EN LA COLLECTION ROOMS DE FIRESTORE CON EL ID LARGO DENTRO
                 roomsCollectionRef
                     .doc(roomId.toString())
                     .set({
-                    rtdbRoomId: roomLongId,
+                    rtdbRoomId: roomLongId
                 })
                     // DEVUELVE EL ID CORTO
-                    .then(() => {
+                    .then(function () {
                     res.json({
-                        id: roomId.toString(),
+                        id: roomId.toString()
                     });
                 });
             });
@@ -102,36 +104,36 @@ app.post("/rooms", (req, res) => {
         else {
             // SI NO EXISTE, DEVUELVE UN ERROR 401
             res.status(401).json({
-                message: "El id del usuario no existe.",
+                message: "El id del usuario no existe."
             });
         }
     });
 });
 // CONECTA AL USER CON UN ROOM EXISTENTE
-app.get("/rooms/:roomId", (req, res) => {
-    const { userId } = req.query;
-    const { roomId } = req.params;
+app.get("/rooms/:roomId", function (req, res) {
+    var userId = req.query.userId;
+    var roomId = req.params.roomId;
     // REVISA SI EL USER ID CORRESPONDE A ALGUN USUARIO DE USERS EN FIRESTORE
     userCollectionRef
         .doc(userId.toString())
         .get()
-        .then((doc) => {
+        .then(function (doc) {
         // SI EXISTE, VA A BUSCAR EL ROOM ID LARGO DENTRO DE FIRESTORE, USANDO EL ID CORTO
         if (doc.exists) {
             roomsCollectionRef
                 .doc(roomId)
                 .get()
-                .then((snap) => {
+                .then(function (snap) {
                 // VERIFICA QUE EL ROOM EXISTA
                 if (snap.exists) {
                     // TERMINA DEVOLVIENDO EL ID LARGO QUE CORRESPONDE AL ROOM
-                    const data = snap.data();
+                    var data = snap.data();
                     res.json(data);
                 }
                 else {
                     // SI NO EXISTE, DEVUELVE UN ERROR 401
                     res.status(401).json({
-                        message: "El room indicado no existe.",
+                        message: "El room indicado no existe."
                     });
                 }
             });
@@ -139,21 +141,21 @@ app.get("/rooms/:roomId", (req, res) => {
         else {
             // SI NO EXISTE, DEVUELVE UN ERROR 401
             res.status(401).json({
-                message: "El id del usuario no existe.",
+                message: "El id del usuario no existe."
             });
         }
     });
 });
 app.post("/rooms/:id", function (req, res) {
-    const chatRoomRef = realtimeDB.ref("/rooms/" + req.params.id + "/messages");
-    chatRoomRef.on("value", (snap) => {
-        let value = snap.val();
+    var chatRoomRef = database_1.realtimeDB.ref("/rooms/" + req.params.id + "/messages");
+    chatRoomRef.on("value", function (snap) {
+        var value = snap.val();
     });
     chatRoomRef.push(req.body, function () {
         res.json("todo ok");
     });
 });
 //API LISTEN
-app.listen(port, () => {
-    console.log(`Estamos conectados al puerto: ${port}`);
+app.listen(port, function () {
+    console.log("Estamos conectados al puerto: " + port);
 });
