@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 
 //API INIT AND CONFIG
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000
 app.use(express.json());
 app.use(cors());
 
@@ -13,6 +13,12 @@ const userCollectionRef = firestore.collection("users");
 const roomsCollectionRef = firestore.collection("rooms");
 
 // ENDPOINTS
+
+app.get("/env",(req,res)=>{
+  res.json({
+    environment: process.env.NODE_ENV
+  })
+})
 
 // SIGNUP
 app.post("/signup", (req, res) => {
