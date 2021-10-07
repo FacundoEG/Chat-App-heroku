@@ -155,6 +155,12 @@ app.post("/rooms/:id", function (req, res) {
         res.json("todo ok");
     });
 });
+// EXPRESS STATIC
+app.use(express.static("dist"));
+// RETURN TO INDEX.HTML
+app.get("*", function (req, res) {
+    res.sendFile(__dirname + "/dist/index.html");
+});
 //API LISTEN
 app.listen(port, function () {
     console.log("Estamos conectados al puerto: " + port);
