@@ -3,5 +3,6 @@
     "target": "ESNext",
     "moduleResolution": "node",
      "resolveJsonModule": true  
-  }
+  },
+  "files": ["./index.ts"]
 }
