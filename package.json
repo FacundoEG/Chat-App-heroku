@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon --watch ./index.ts --exec ts-node dev.ts",
     "dev:front": "parcel serve ./src/index.html",
     "build:front": "parcel build ./src/index.html",
-    "dev": "nodemon --watch ./index.ts --exec ts-node index.ts",
     "build:api": "tsc ./index.ts",
     "build": "yarn build:front && yarn build:api",
     "start": "node index.js"
