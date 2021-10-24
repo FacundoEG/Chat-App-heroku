@@ -106,8 +106,16 @@ class ChatPage extends HTMLElement {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const target = e.target as any;
-      // SE AGREGAN LOS NUEVOS MENSAJES A LA RTDB
-      state.pushNewMessage(target["new-message"].value);
+      let newMessage = target["new-message"].value;
+
+      if (newMessage.trim() !== "") {
+        // SE AGREGAN LOS NUEVOS MENSAJES A LA RTDB
+        state.pushNewMessage(newMessage);
+      } else {
+        alert(
+          "Lo siento, pero no puedes enviar mensajes vacíos. Vuelve a intentarlo otra vez."
+        );
+      }
     });
   }
 
