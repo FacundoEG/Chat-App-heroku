@@ -1,4 +1,4 @@
-# chat-app-heroku
+# Chat-App-Heroku
 
 Webapp link: https://chat-app-rooms-heroku.herokuapp.com/
 
